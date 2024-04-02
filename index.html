@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        #map { height: 450px; }
+        .breadcrumb.center-items{
+    display:inline-block;
+    margin:0 auto;
+}
+.breadcrumb{
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    overflow: hidden;
+}
+.breadcrumb li{
+    float: left;
+    padding: 8px 15px 8px 50px;
+    background: #fdec82;
+    font-size: 14px;
+    font-weight: bold;
+    color: #777;
+    position: relative;
+}
+.breadcrumb li:first-child{ background: #fdf9cc; }
+.breadcrumb li:last-child{
+    background: #ccc;
+    margin-right: 18px;
+}
+.breadcrumb li:before{ display: none; }
+.breadcrumb li:after{
+    content: "";
+    display: block;
+    border-left: 18px solid grey;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    position: absolute;
+    top: 0;
+    right: -18px;
+    z-index: 1;
+}
+.breadcrumb li:first-child:after{ border-left-color:grey; }
+.breadcrumb li:last-child:after{ border-left-color:grey; }
+.breadcrumb li a{
+    font-size: 14px;
+    font-weight: bold;
+    color: #777;
+}
+@media only screen and (max-width: 479px){
+    .breadcrumb li{ padding: 8px 15px 8px 30px; }
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark" style="min-height:80px">
+        <div class="container-fluid"  style="opacity: 0.8;">
+            <a class="navbar-brand" href="#" style="color:#fff">
+                <img width="60"  height="60"  class="d-inline-block align-text-center" src="https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png?20210305165005" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                Smart Mobility Jabodetabek
+              </a>
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a   style="color:#fff"class="nav-link active" aria-current="page" href="#">Pantau Banjir</a>
+                </li>
+                <li class="nav-item">
+                  <a  style="color:#fff"class="nav-link" href="#">Pantau Lalu Lintas</a>
+                </li>
+                <li class="nav-item">
+                  <a  style="color:#fff"class="nav-link" href="#">Pantau Fasilitas Umum</a>
+                </li>
+                
+              </ul>
+          </div>
+        </div>
+      </nav>
+    <div class="container">
+        
+        <div class="row" id="page1">
+          <div class="col-lg-12 mt-2">
+            <div id="map"></div>
+          </div>
+          
+          <div class="mb-3 mt-2">
+          <label for="exampleFormControlInput1" class="form-label">Pilih Lokasi Anda</label>
+          <select class="form-select" aria-label="Default select example">
+          <option selected>Select</option>
+          
+        </select>
+        </div>
+        
+        <div class="mb-3 mt-2">
+          <label for="exampleFormControlInput1" class="form-label">Pilih Tujuan Anda</label>
+          <select class="form-select" aria-label="Default select example">
+          <option selected>Select</option>
+          
+        </select>
+        </div>
+        
+        <div class="mb-3 mt-2">
+        <p class="text-center">
+        <a class="btn btn-primary" href="#page2" style="width:300px">Cari Jalur Terbaik</a>
+        </p>
+        </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-lg-6 col-md-6">
+                <h3>CCTV Stasiun</h3>
+                <div class="ratio ratio-16x9">
+                    <iframe class="rounded-bottom" allowFullScreen src="https://cctv-stasiun.dephub.go.id/cctv/stream.html?src=Tanah-Abang-102"></iframe>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <h3>CCTV Jalan</h3>
+                <div class="ratio ratio-16x9">
+            <video id="cam-viewer-video-332" controls autoplay class="video-js vjs-default-skin" controls preload="none" data-setup="{}">
+                <source src="https://media.lewatmana.com/cam/sotisresidence/332/videoclip20240402_162705.384.mp4" type="video/mp4" />
+                <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that
+                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                </video>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="page2">
+          <div  class="col-lg-12 rounded-2 p-3" style="min-height:300px auto;background:#26C281">
+            <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            Alternatif 1
+          </label>
+        </div>
+        <ol class="breadcrumb center-items">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Themes</a></li>
+            <li class="active">Wordpress Themes</li>
+        </ol>
+             <i class="fa fa-eyes-open"></i>
+             <div class="card">
+               <div class="card-body">
+                 <ul class="list-group">
+          <li class="list-group-item">Stasiun 1 <span class="pull-right"><span class="rounded-circle bg-danger" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Padat</span></li>
+          <li class="list-group-item">Stasiun 2 <span class="pull-right"><span class="rounded-circle bg-warning" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Sedikit Padat</span></li>
+          <li class="list-group-item">Stasiun 3 <span class="pull-right"><span class="rounded-circle bg-danger" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Padat</span></li>
+        
+        </ul>
+        <hr>
+        <p><b>Jarak : 80 KM</b></p>
+        <p><b>Perkiraan waktu tempuh: 2 Jam</b></p>
+               </div>
+             </div>
+          </div>
+
+          <div  class="col-lg-12 rounded-2 p-3" style="min-height:300px auto;background:#FFA400">
+            <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            Alternatif 2
+          </label>
+        </div>
+        <ol class="breadcrumb center-items">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Themes</a></li>
+            <li class="active">Wordpress Themes</li>
+        </ol>
+             <i class="fa fa-eyes-open"></i>
+             <div class="card">
+               <div class="card-body">
+                 <ul class="list-group">
+          <li class="list-group-item">Stasiun 1 <span class="pull-right"><span class="rounded-circle bg-success" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Lengang</span></li>
+          <li class="list-group-item">Stasiun 2 <span class="pull-right"><span class="rounded-circle bg-warning" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Sedikit Padat</span></li>
+          <li class="list-group-item">Stasiun 3 <span class="pull-right"><span class="rounded-circle bg-success" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Lengang</span></li>
+        
+        </ul>
+        <hr>
+        <p><b>Jarak : 80 KM</b></p>
+        <p><b>Perkiraan waktu tempuh: 2 Jam</b></p>
+               </div>
+             </div>
+          </div>
+
+          <div  class="col-lg-12 rounded-2 p-3" style="min-height:300px auto;background:#D24D57">
+            <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+          <label class="form-check-label" for="flexRadioDefault1">
+            Alternatif 3
+          </label>
+        </div>
+            <ol class="breadcrumb center-items">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Themes</a></li>
+            <li class="active">Wordpress Themes</li>
+        </ol>
+             <i class="fa fa-eyes-open"></i>
+             <div class="card">
+               <div class="card-body">
+                 <ul class="list-group">
+          <li class="list-group-item">Halte 1 <span class="pull-right"><span class="rounded-circle bg-success" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Lengang</span></li>
+          <li class="list-group-item">Stasiun 2 <span class="pull-right"><span class="rounded-circle bg-warning" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Sedikit Padat</span></li>
+          <li class="list-group-item">Halte 3 <span class="pull-right"><span class="rounded-circle bg-danger" style="width:10px;height:10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> Padat</span></li>
+        
+        </ul>
+        <hr>
+        <p><b>Jarak : 80 KM</b></p>
+        <p><b>Perkiraan waktu tempuh: 2 Jam</b></p>
+               </div>
+             </div>
+          </div>
+          <div class="mb-3 mt-2">
+          <p class="text-center">
+            <a class="btn btn-primary" style="width:300px" href="#page3">Continue</a>
+            </p>
+        </div>
+        </div>
+
+        <div class="row" id="page3">
+
+        </div>
+      
+        </div>
+        </div> 
+
+        <script>
+            var map = L.map('map').setView([-6.21462,106.84513], 11);
+
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+        </script>
+</body>
+</html>
